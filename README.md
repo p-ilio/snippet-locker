@@ -32,4 +32,4 @@ In a new terminal, go to `/frontend`, install the stuff:
 And fire it up:
 `npm run dev`
 
-*Don't forget to create a `.env` file in the frontend folder based on the `.env.example` I left for you!*
+Don't forget to create a .env file in the frontend folder and add your API URL like this: VITE_API_URL=http://127.0.0.1:8000/api/
