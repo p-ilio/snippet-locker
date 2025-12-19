@@ -1,4 +1,4 @@
-# 🔒 Snippet Locker
+# Snippet Locker
 
 Hey! This is my Snippet Locker. I built this because I got tired of constantly searching through old projects or random browser bookmarks just to find that one specific piece of code I use all the time. 
 
@@ -10,13 +10,13 @@ I wanted to practice building a "Full Stack" app, so I used:
 * **React** on the front end to make it feel fast and snappy.
 * **Tailwind CSS** because I wanted it to look dark and modern without writing 500 lines of CSS.
 
-## ✨ What it does right now
+## What it does right now
 * You can save a snippet with a title and the code itself.
 * It lists everything in a clean dashboard.
 * If you don't need a snippet anymore, there's a quick delete button to keep things tidy.
 * It's set up with environment variables, so the API URLs aren't hardcoded (keeps things secure!).
 
-## 🚀 Want to run it yourself?
+## Want to run it yourself?
 If you've cloned this, here is the "non-boring" guide to getting it started:
 
 ### 1. The Backend (The Brain)
