@@ -4,7 +4,7 @@ Hey! This is my Snippet Locker. I built this because I got tired of constantly s
 
 It’s a simple, clean place to "lock away" your favorite code snippets so you can find them exactly when you need them.
 
-## 🛠️ How I built this
+## How I built this
 I wanted to practice building a "Full Stack" app, so I used:
 * **Django (Python)** on the back end to handle the data and the API.
 * **React** on the front end to make it feel fast and snappy.
