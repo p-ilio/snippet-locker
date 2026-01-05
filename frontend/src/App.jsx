@@ -5,7 +5,8 @@ import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 /**
  * Main application component for Snippet Locker
- * * A full-stack code snippet management application that allows users to:
+ * 
+ * A full-stack code snippet management application that allows users to:
  * - Create new code snippets with syntax highlighting
  * - Edit existing snippets with a modal interface
  * - View all saved snippets in a responsive grid layout
@@ -13,7 +14,8 @@ import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
  * - Copy snippets to clipboard with visual feedback
  * - Delete snippets with confirmation
  * - Authentication: Secure Login/Register and Token storage
- * * @component
+ * 
+ * @component
  * @returns {JSX.Element} The main application interface
  */
 function App() {
@@ -122,7 +124,7 @@ function App() {
     try {
       const response = await api.post('auth/', { username, password });
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('username', username); // Store for Header display
+      localStorage.setItem('username', username);
       setIsAuthenticated(true);
     } catch (error) {
       console.error("Login failed", error);
@@ -269,10 +271,7 @@ function App() {
 
   if (!isAuthenticated) {
     return (
-      /* Using h-[100vh] and w-screen to force the container to fill the Vite body */
       <div className="h-[100vh] w-screen flex items-center justify-center bg-[#242424]">
-        
-        {/* Your original card look, but with a fixed width to keep it centered */}
         <div className="bg-[#1a1a1a] p-10 rounded-xl shadow-2xl w-[400px] border border-gray-800">
           <h1 className="text-4xl font-bold text-blue-400 mb-2 text-center">Snippet Locker</h1>
           <p className="text-gray-400 text-center mb-8 text-sm">
@@ -311,9 +310,9 @@ function App() {
   // ============================================================================
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen w-screen bg-gray-900 text-white">
       {/* Header Section */}
-      <div className="px-4 md:px-8 py-6 border-b border-gray-800 flex justify-between items-center">
+      <div className="w-full px-4 md:px-8 py-6 border-b border-gray-800 flex justify-between items-center">
         <div>
           <h1 className="text-4xl font-bold text-blue-400">Snippet Locker</h1>
           <p className="text-gray-400 mt-2">Welcome back, {localStorage.getItem('username')}</p>
@@ -321,14 +320,14 @@ function App() {
         <button 
           onClick={handleLogout}
           className="!bg-red-600 hover:!bg-red-700 !text-white px-4 py-2 rounded-md font-bold transition-colors shadow-lg border-none"
-        style={{ backgroundColor: '#dc2626', color: 'white' }} // Inline style as a backup
+          style={{ backgroundColor: '#dc2626', color: 'white' }}
         >
           Logout
         </button>
       </div>
 
       {/* Main Content - Two Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-0 h-[calc(100vh-140px)]">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-4 gap-0 h-[calc(100vh-140px)]">
         
         {/* Left Column - Create Form */}
         <div className="lg:col-span-1 bg-gray-800 border-r border-gray-700 p-6 overflow-y-auto">
@@ -381,8 +380,9 @@ function App() {
         </div>
 
         {/* Right Column - Snippets List */}
-        <div className="lg:col-span-3 p-6 overflow-y-auto bg-gray-900">
-          <div className="mb-6 flex flex-col sm:flex-row gap-4">
+        <div className="lg:col-span-3 p-6 overflow-y-auto bg-gray-900 flex flex-col">
+          {/* Search and Filter Bar */}
+          <div className="mb-6 flex flex-col sm:flex-row gap-4 flex-shrink-0">
             <div className="flex-1">
               <input
                 type="text"
@@ -408,21 +408,70 @@ function App() {
             </div>
           </div>
 
+          {/* Results Counter */}
           {!isLoading && snippets.length > 0 && (
-            <div className="mb-4 text-gray-400 text-sm">
+            <div className="mb-4 text-gray-400 text-sm flex-shrink-0">
               Showing {filteredSnippets.length} of {snippets.length} snippets
+              {(searchQuery || languageFilter) && (
+                <button
+                  onClick={() => {
+                    setSearchQuery('')
+                    setLanguageFilter('')
+                  }}
+                  className="ml-4 text-blue-400 hover:text-blue-300 underline"
+                >
+                  Clear filters
+                </button>
+              )}
             </div>
           )}
 
+          {/* Content Area - Takes remaining space */}
+          <div className="flex-1 flex flex-col min-h-0">
+
+          {/* Loading State */}
           {isLoading && (
-            <div className="text-center py-12 bg-gray-800 rounded-lg border border-gray-700">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400 mb-4"></div>
-              <p className="text-gray-400 text-lg">Loading your snippets...</p>
+            <div className="flex items-center justify-center flex-1">
+              <div className="text-center py-12 bg-gray-800 rounded-lg border border-gray-700 px-8">
+                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400 mb-4"></div>
+                <p className="text-gray-400 text-lg">Loading your snippets...</p>
+              </div>
             </div>
           )}
 
+          {/* Empty State - When user has no snippets */}
+          {!isLoading && snippets.length === 0 && (
+            <div className="flex items-center justify-center flex-1 w-full">
+              <div className="text-center">
+                <div className="text-6xl mb-4">📭</div>
+                <p className="text-gray-400 text-2xl mb-2 font-semibold">No snippets yet!</p>
+                <p className="text-gray-500 text-lg">Create your first snippet to get started.</p>
+              </div>
+            </div>
+          )}
+
+          {/* No Results State - When filter returns nothing */}
+          {!isLoading && snippets.length > 0 && filteredSnippets.length === 0 && (
+            <div className="flex items-center justify-center flex-1">
+              <div className="text-center py-12 bg-gray-800 rounded-lg border border-gray-700 px-8">
+                <p className="text-gray-400 text-lg mb-2">🔍 No snippets found</p>
+                <p className="text-gray-500">Try adjusting your search or filter criteria.</p>
+                <button
+                  onClick={() => {
+                    setSearchQuery('')
+                    setLanguageFilter('')
+                  }}
+                  className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition"
+                >
+                  Clear filters
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Snippets Grid */}
           {!isLoading && filteredSnippets.length > 0 && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 overflow-y-auto">
               {filteredSnippets.map(snip => (
                <div key={snip.id} className="bg-gray-800 p-6 rounded-lg border border-gray-700 relative group flex flex-col h-full">
                  <div className="flex justify-between items-start mb-2">
@@ -433,11 +482,26 @@ function App() {
                      </span>
                    </div>
                    <div className="flex gap-2 ml-2">
-                     <button onClick={() => handleEditClick(snip)} className="bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-bold px-3 py-1 rounded transition duration-200">✏️</button>
-                     <button onClick={() => handleCopy(snip.code, snip.id)} className="bg-green-600 hover:bg-green-700 text-white text-sm font-bold px-3 py-1 rounded transition duration-200">
+                     <button 
+                       onClick={() => handleEditClick(snip)} 
+                       className="bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-bold px-3 py-1 rounded transition duration-200"
+                       title="Edit snippet"
+                     >
+                       ✏️
+                     </button>
+                     <button 
+                       onClick={() => handleCopy(snip.code, snip.id)} 
+                       className="bg-green-600 hover:bg-green-700 text-white text-sm font-bold px-3 py-1 rounded transition duration-200"
+                       title="Copy to clipboard"
+                     >
                        {copiedId === snip.id ? '✓' : '📋'}
                      </button>
-                     <button onClick={() => handleDelete(snip.id)} className="bg-red-600 hover:bg-red-700 text-white text-sm font-bold px-3 py-1 rounded transition duration-200" disabled={deletingId === snip.id}>
+                     <button 
+                       onClick={() => handleDelete(snip.id)} 
+                       className="bg-red-600 hover:bg-red-700 text-white text-sm font-bold px-3 py-1 rounded transition duration-200" 
+                       disabled={deletingId === snip.id}
+                       title="Delete snippet"
+                     >
                        {deletingId === snip.id ? '⏳' : '🗑️'}
                      </button>
                    </div>
@@ -456,6 +520,7 @@ function App() {
               ))}
             </div>
           )}
+          </div>{/* End Content Area */}
         </div>
       </div>
 
@@ -466,14 +531,54 @@ function App() {
             <div className="p-6">
               <h2 className="text-2xl font-bold text-blue-300 mb-6">Edit Snippet</h2>
               <form onSubmit={handleUpdateSnippet} className="space-y-4">
-                <input className="w-full bg-gray-700 p-2 rounded outline-none" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} required />
-                <select className="w-full bg-gray-700 p-2 rounded outline-none" value={editLanguage} onChange={(e) => setEditLanguage(e.target.value)}>
-                  {languages.map(lang => (<option key={lang.value} value={lang.value}>{lang.label}</option>))}
-                </select>
-                <textarea className="w-full bg-gray-700 p-2 rounded h-64 font-mono text-sm outline-none" value={editCode} onChange={(e) => setEditCode(e.target.value)} required />
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">Title</label>
+                  <input 
+                    className="w-full bg-gray-700 p-2 rounded outline-none focus:ring-2 ring-blue-500" 
+                    value={editTitle} 
+                    onChange={(e) => setEditTitle(e.target.value)} 
+                    required 
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">Language</label>
+                  <select 
+                    className="w-full bg-gray-700 p-2 rounded outline-none focus:ring-2 ring-blue-500 cursor-pointer" 
+                    value={editLanguage} 
+                    onChange={(e) => setEditLanguage(e.target.value)}
+                  >
+                    {languages.map(lang => (
+                      <option key={lang.value} value={lang.value}>{lang.label}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">Code</label>
+                  <textarea 
+                    className="w-full bg-gray-700 p-2 rounded h-64 font-mono text-sm outline-none focus:ring-2 ring-blue-500" 
+                    value={editCode} 
+                    onChange={(e) => setEditCode(e.target.value)} 
+                    required 
+                  />
+                </div>
                 <div className="flex gap-3 pt-4">
-                  <button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold p-3 rounded-md">Update</button>
-                  <button type="button" onClick={handleCancelEdit} className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-bold p-3 rounded-md">Cancel</button>
+                  <button 
+                    type="submit" 
+                    style={{ backgroundColor: isSubmitting ? '#4b5563' : '#3b82f6' }}
+                    className="flex-1 hover:bg-blue-600 text-white font-bold p-3 rounded-md transition duration-200"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Updating...' : 'Update Snippet'}
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={handleCancelEdit} 
+                    style={{ backgroundColor: '#374151' }}
+                    className="flex-1 hover:bg-gray-600 text-white font-bold p-3 rounded-md transition duration-200"
+                    disabled={isSubmitting}
+                  >
+                    Cancel
+                  </button>
                 </div>
               </form>
             </div>
