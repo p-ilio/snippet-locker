@@ -10,15 +10,32 @@ I wanted to practice building a "Full Stack" app, so I used:
 * **React** on the front end to make it feel fast and snappy.
 * **Tailwind CSS** because I wanted it to look dark and modern without writing 500 lines of CSS.
 
-## What it does right now
-Save a snippet with a **title**, **code**, and **programming language**.  
-* List all your snippets in a clean, searchable dashboard.  
-* Edit snippets in a modal window without leaving the page.  
-* Copy snippets to your clipboard with a simple click.  
-* Delete snippets to keep things tidy.  
-* Filter snippets by **language** or search by **title/code**.  
-* Secure authentication: register, login, logout. Each user sees    only their own snippets.
-* It's set up with environment variables, so the API URLs aren't hardcoded (keeps things secure!).
+## Features
+
+### User Management
+- Secure user registration and login
+- Token-based authentication
+- Each user has their own private snippet collection
+
+### Snippet Management
+- Create, read, update, and delete code snippets
+- Search snippets by title or code content
+- Filter by programming language
+- One-click copy to clipboard
+- Edit existing snippets with a modal interface
+
+### Code Display
+- Syntax highlighting for 20+ programming languages
+- Line numbers for better readability
+- Responsive grid layout
+- Dark theme optimized for coding
+
+### User Experience
+- Loading states for all async operations
+- Empty state messaging
+- Real-time search and filtering
+- Full-width responsive design
+
 
 ## Screenshots
 
@@ -32,7 +49,15 @@ Save a snippet with a **title**, **code**, and **programming language**.
 
 ### Language Support / Filter
 ![Language Support](Screenshots/Language%20Support.png)
-*List of languages supported with syntax highlighting*
+*List of languages supported with syntax highlighting.*
+
+### Edit
+![Edit Feature](Screenshots/Edit.png)
+*Edit your snippet when you need.*
+
+### Search Filter
+![Search](Screenshots/Search_filter.png)
+*Either search your snippet or filter the language selection.*
 
 ## Want to run it yourself?
 If you've cloned this, here is the "non-boring" guide to getting it started:
